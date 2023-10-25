@@ -123,7 +123,7 @@ const swaggerOptions = {
 			},
 		],
 	},
-	apis: ['./app.js'], // Replace with the path to your route files
+	apis: ['app.js'], // Replace with the path to your route files
 };
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////// REST ENDPOINTS START HERE ///////////////////////////
