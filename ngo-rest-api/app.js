@@ -48,6 +48,9 @@ var orgName = "";
 var channelName = hfc.getConfigSetting('channelName');
 var chaincodeName = hfc.getConfigSetting('chaincodeName');
 var peers = hfc.getConfigSetting('peers');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// SET CONFIGURATIONS ///////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -105,11 +108,31 @@ wss.on('connection', function connection(ws) {
 
 	ws.send('something');
 });
-
+// Swagger setup
+const swaggerOptions = {
+	definition: {
+		openapi: '3.0.0',
+		info: {
+			title: 'RWA API',
+			version: '1.0.0',
+			description: 'API documentation using Swagger',
+		},
+		servers: [
+			{
+				url: 'http://localhost:5000', // Replace with your server URL
+			},
+		],
+	},
+	apis: ['./app.js'], // Replace with the path to your route files
+};
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////// REST ENDPOINTS START HERE ///////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 // Health check - can be called by load balancer to check health of REST API
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 app.get('/health', awaitHandler(async (req, res) => {
 	res.sendStatus(200);
 }));
